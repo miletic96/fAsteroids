@@ -1,20 +1,21 @@
-function renderingSystem(entities, canvas) {
-    return function (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let entity of entities) {
-            if (entity.components.appearance) {
-                let pos = entity.components.position.value;
-                let type = entity.components.appearance.value.type;
-                if (type === 'ship') {
-                    ctx.beginPath();
-                    ctx.moveTo(pos.x, pos.y);
-                    ctx.lineTo(pos.x - 10, pos.y + 20);
-                    ctx.lineTo(pos.x + 10, pos.y + 20);
-                    ctx.closePath();
-                    ctx.stroke();
+function renderingSystem(entities, ctx) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    for (let entity of entities) {
+        if (entity.components.appearance && entity.components.position && entity.components.rotation) {
+            let pos = entity.components.position.value;
+            let angle = entity.components.rotation.value.angle;
+            let type = entity.components.appearance.value.type;
+            let size = entity.components.appearance.value.size;
+           
+            if (type === 'ship') {
+                drawShip(ctx, pos, angle);
+            } else if (type === 'asteroid') {
+                if (entity.components.shape) {
+                    let shape = entity.components.shape.value
+                    drawAsteroid(ctx, pos, angle, shape);
                 }
             }
         }
-        return entities;
     }
+    return entities;
 }

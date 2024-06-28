@@ -1,24 +1,45 @@
+if (!window.keys) {
+    window.keys = {};
+}
+window.addEventListener('keydown', function (event) {
+    keys[event.key] = true;
+});
+
+window.addEventListener('keyup', function (event) {
+    keys[event.key] = false;
+});
 function userInputSystem(entities) {
-    window.addEventListener('keydown', function (event) {
-        for (let entity of entities) {
-            if (entity.components.control) { // Assuming control component is unique to the player
-                switch (event.key) {
-                    case 'ArrowUp':
-                        entity.components.velocity.value.y -= 0.001;
-                        break;
-                    case 'ArrowDown':
-                        entity.components.velocity.value.y += 0.001;
-                        break;
-                    case 'ArrowLeft':
-                        entity.components.velocity.value.x -= 0.001;
-                        break;
-                    case 'ArrowRight':
-                        entity.components.velocity.value.x += 0.001;
-                        break;
+
+    for (let entity of entities) {
+        if (entity.components.control) { // Assuming control component is unique to the player
+            console.log(entity);
+            if (keys['ArrowUp']) {
+                entity.components.acceleration.value = 0.1; // Apply acceleration
+            } else {
+                entity.components.acceleration.value = 0; // Stop acceleration when key is released
+            }
+            if (keys['ArrowLeft']) {
+                if (typeof entity.components.rotation.value.angle === 'number') {
+                    entity.components.rotation.value.angle -= 3; // Rotate left
+                    if (entity.components.rotation.value.angle < 0) {
+                        entity.components.rotation.value.angle += 360
+                    }
+                } else {
+                    entity.components.rotation.value.angle = 0; // Initialize if NaN
+                }
+            }
+            if (keys['ArrowRight']) {
+                if (typeof entity.components.rotation.value.angle === 'number') {
+                    entity.components.rotation.value.angle += 3; // Rotate right
+                    if (entity.components.rotation.value.angle > 359) {
+                        entity.components.rotation.value.angle -= 360
+                    }
+                } else {
+                    entity.components.rotation.value.angle = 0; // Initialize if NaN
                 }
             }
         }
-    });
+    }
 
     return entities;
 }
