@@ -1,30 +1,40 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>fAsteroids ECS Game</title>
-    <script src="js/entity.js"></script>
-    <script src="js/component.js"></script>
-    <script src="js/systems/userInputSystem.js"></script>
-    <script src="js/systems/renderingSystem.js"></script>
-    <script src="js/systems/physicsSystem.js"></script>
-    <script src="js/systems/collisionSystem.js"></script>
-    <script src="js/systems/gameLogicSystem.js"></script>
-    <!-- <script src="js/utils.js"></script> -->
-    <script src="js/main.js"></script>
+
 </head>
+
 <body>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background-color: black; 
+        }
+    </style>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <div id="angleTag"></div>
+    <div>
+        <p>Time Played: <span id="timer">0</span> seconds</p>
+        <p>Hits: <span id="hits">0</span></p>
+        <p>Score: <span id="score">0</span></p>
+
+    </div>
 </body>
-<script src="js/entity.js"></script>
-    <script src="js/component.js"></script>
-    <script src="js/systems/userInputSystem.js"></script>
-    <script src="js/systems/renderingSystem.js"></script>
-    <script src="js/systems/physicsSystem.js"></script>
-    <script src="js/systems/collisionSystem.js"></script>
-    <script src="js/systems/gameLogicSystem.js"></script>
-    <script src="js/systems/asteroidSpawningSystem.js"></script>
-    <script src="js/draw.js"></script>
-    <!-- <script src="js/utils.js"></script> -->
-    <script src="js/main.js"></script>
+<script src="js/entities/entity.js"></script>
+<script src="js/entities/bullet.js"></script>
+<script src="js/entities/asteroid.js"></script>
+<script src="js/component.js"></script>
+<script src="js/systems/userInputSystem.js"></script>
+<script src="js/systems/renderingSystem.js"></script>
+<script src="js/systems/physicsSystem.js"></script>
+<script src="js/systems/collisionSystem.js"></script>
+<script src="js/systems/gameLogicSystem.js"></script>
+<script src="js/systems/asteroidSpawningSystem.js"></script>
+<script src="js/draw.js"></script>
+<script src="js/main.js"></script>
 </html>

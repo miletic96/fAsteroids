@@ -5,15 +5,16 @@ function renderingSystem(entities, ctx) {
             let pos = entity.components.position.value;
             let angle = entity.components.rotation.value.angle;
             let type = entity.components.appearance.value.type;
-            let size = entity.components.appearance.value.size;
-           
+
             if (type === 'ship') {
                 drawShip(ctx, pos, angle);
             } else if (type === 'asteroid') {
                 if (entity.components.shape) {
-                    let shape = entity.components.shape.value
+                    let shape = entity.components.shape.value;
                     drawAsteroid(ctx, pos, angle, shape);
                 }
+            } else if (type === 'bullet') {
+                drawBullet(ctx, pos, angle);
             }
         }
     }

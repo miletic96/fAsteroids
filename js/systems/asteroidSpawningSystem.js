@@ -1,52 +1,49 @@
-let lastAsteroidTime = performance.now();
-let nextAsteroidTime = Math.random() * 2000 + 1000; // Initial random time between 1 and 3 seconds
+let lastAsteroidTime = 0;
+let nextAsteroidTime =  Math.random() * 0.5 ; // Initial random time 
 
-function asteroidSpawningSystem(entities, canvas) {
+function asteroidSpawningSystem(entities, canvas, deltaTime) {
     const asteroidSizes = ['large', 'medium', 'small'];
     const asteroidSpeed = { large: 1, medium: 2, small: 3 };
-    function generateAsteroidShape(size) {
-        const radius = size === 'large' ? 40 : size === 'medium' ? 20 : 10;
-        const numVertices = 8; // Number of vertices for the asteroid
-        const jaggedness = 0.4; // Amount of variation in the vertex positions
-        const vertices = [];
-    
-        for (let i = 0; i < numVertices; i++) {
-            const angle = (i / numVertices) * 2 * Math.PI;
-            const offset = radius * (1 + (Math.random() - 0.5) * jaggedness);
-            const x = Math.cos(angle) * offset;
-            const y = Math.sin(angle) * offset;
-            vertices.push({ x, y });
-        }
-    
-        return vertices;
-    }
+
     function spawnAsteroid(size) {
-        const position = {
-            x: Math.random() < 0.5 ? Math.random() * canvas.width : Math.random() < 0.5 ? -50 : canvas.width + 50,
-            y: Math.random() < 0.5 ? Math.random() * canvas.height : Math.random() < 0.5 ? -50 : canvas.height + 50
-        };
-        const angle = Math.random() * 360;
+        const edge = Math.floor(Math.random() * 4); // 0: left, 1: right, 2: top, 3: bottom
+        let position = { x: 0, y: 0 };
+        let angle = 0;
+
+        switch (edge) {
+            case 0: // left
+                position = { x: -50, y: Math.random() * canvas.height };
+                angle = Math.random() * 180 - 90; // Random angle between -90 and 90
+                break;
+            case 1: // right
+                position = { x: canvas.width + 50, y: Math.random() * canvas.height };
+                angle = Math.random() * 180 + 90; // Random angle between 90 and 270
+                break;
+            case 2: // top
+                position = { x: Math.random() * canvas.width, y: -50 };
+                angle = Math.random() * 180 + 180; // Random angle between 180 and 360
+                break;
+            case 3: // bottom
+                position = { x: Math.random() * canvas.width, y: canvas.height + 50 };
+                angle = Math.random() * 180; // Random angle between 0 and 180
+                break;
+        }
+
         const velocity = {
             x: Math.cos(angle * Math.PI / 180) * asteroidSpeed[size],
             y: Math.sin(angle * Math.PI / 180) * asteroidSpeed[size]
         };
-        const shape = generateAsteroidShape(size);
-        return new Entity()
-            .addComponent(new Component('position', position))
-            .addComponent(new Component('velocity', velocity))
-            .addComponent(new Component('rotation', { angle }))
-            .addComponent(new Component('appearance', { type: 'asteroid', size }))
-            .addComponent(new Component('collider', { radius: size === 'large' ? 40 : size === 'medium' ? 20 : 10 }))
-            .addComponent(new Component('shape', shape)); // Add shape component;
-            
+        let asteroid = createAsteroid(size, position, velocity, angle);
+        return asteroid;
     }
 
-    const currentTime = performance.now();
-    if (currentTime - lastAsteroidTime > nextAsteroidTime) {
+    lastAsteroidTime += deltaTime;
+
+    if (lastAsteroidTime > nextAsteroidTime) {
         const size = asteroidSizes[Math.floor(Math.random() * asteroidSizes.length)];
         entities.push(spawnAsteroid(size));
-        lastAsteroidTime = currentTime;
-        nextAsteroidTime = Math.random() * 2000 + 1000; // Random time between 1 and 3 seconds
+        lastAsteroidTime = 0;
+        nextAsteroidTime = Math.random() * 0.5 ; // Random time 
     }
 
     return entities;
