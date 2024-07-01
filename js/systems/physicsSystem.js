@@ -42,7 +42,7 @@ function physicsSystem(entities, canvas, deltaTime) {
 
             // Remove entities that are off-screen (except the ship)
             if (entity.components.appearance.value.type !== 'ship' && isOffScreen(entity.components.position.value)) {
-                entities = entities.filter(e => e !== entity);
+                return null; 
             }
         }
         return entity;
