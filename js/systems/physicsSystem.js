@@ -9,7 +9,7 @@ function physicsSystem(entities, canvas, deltaTime) {
         );
     }
 
-    for (let entity of entities) {
+    function updateEntity(entity){
         if (entity.components.position && entity.components.velocity) {
             // Apply friction only to the ship
             if (entity.components.appearance.value.type === 'ship') {
@@ -45,6 +45,8 @@ function physicsSystem(entities, canvas, deltaTime) {
                 entities = entities.filter(e => e !== entity);
             }
         }
+        return entity;
     }
+    entities = applyToEntities(entities, updateEntity).filter(entity => entity !== null);
     return entities;
 }
